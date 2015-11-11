@@ -47,7 +47,7 @@ TARGET_KERNEL_ARCH := arm
 #TARGET_KERNEL_SOURCE := kernel/oneplus/onyx
 
 # Assert
-TARGET_OTA_ASSERT_DEVICE := OnePlus,onyx
+TARGET_OTA_ASSERT_DEVICE := E1003,onyx
 
 # Audio
 BOARD_USES_ALSA_AUDIO := true
