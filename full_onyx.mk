@@ -1,4 +1,5 @@
-# Copyright (C) 2015 The CyanogenMod Project
+#
+# Copyright 2015 The CyanogenMod Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,18 +12,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-# Inherit from onyx device
+# Inherit from oneplus2 device
 $(call inherit-product, device/oneplus/onyx/onyx.mk)
 
-# Enhanced NFC
-$(call inherit-product, vendor/cm/config/nfc_enhanced.mk)
-
-# Inherit some common CM stuff.
-$(call inherit-product, vendor/cm/config/common_full_phone.mk)
-
-PRODUCT_RELEASE_NAME := OnePlus X
 PRODUCT_NAME := cm_onyx
+PRODUCT_DEVICE := onyx
+PRODUCT_MANUFACTURER := OnePlus
+PRODUCT_MODEL := onyx
+PRODUCT_BRAND := OnePlus
+
+PRODUCT_GMS_CLIENTID_BASE := android-oneplus

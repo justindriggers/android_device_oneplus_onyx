@@ -20,6 +20,7 @@ PLATFORM_PATH := device/oneplus/onyx
 TARGET_SPECIFIC_HEADER_PATH := $(PLATFORM_PATH)/include
 
 # Bootloader
+BOARD_VENDOR := oneplus
 TARGET_BOOTLOADER_BOARD_NAME := MSM8974
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
@@ -45,6 +46,9 @@ BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01000000 --tags_offset 0x00000100
 TARGET_KERNEL_ARCH := arm
 #TARGET_KERNEL_CONFIG := onyx_defconfig
 #TARGET_KERNEL_SOURCE := kernel/oneplus/onyx
+
+# ANT+
+BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
 
 # Assert
 TARGET_OTA_ASSERT_DEVICE := E1003,onyx
@@ -121,6 +125,12 @@ TARGET_CONTINUOUS_SPLASH_ENABLED := true
 TARGET_USES_ION := true
 USE_OPENGL_RENDERER := true
 VSYNC_EVENT_PHASE_OFFSET_NS := 7500000
+
+# Init
+TARGET_UNIFIED_DEVICE := true
+TARGET_INIT_VENDOR_LIB := libinit_msm
+TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
+TARGET_LIBINIT_DEFINES_FILE := device/oneplus/onyx/init/init_onyx.c
 
 # Protobuf-c
 PROTOBUF_SUPPORTED := true
