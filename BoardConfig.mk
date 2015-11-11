@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 The CyanogenMod Project
+# Copyright (C) 2015 The CyanogenMod Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,10 +14,7 @@
 # limitations under the License.
 #
 
-# inherit from Oppo common
--include device/oppo/common/BoardConfigCommon.mk
-
-PLATFORM_PATH := device/oneplus/bacon
+PLATFORM_PATH := device/oneplus/onyx
 
 # Include path
 TARGET_SPECIFIC_HEADER_PATH := $(PLATFORM_PATH)/include
@@ -38,35 +35,23 @@ TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 TARGET_CPU_VARIANT := krait
 
-# Assertions
-TARGET_BOARD_INFO_FILE ?= $(PLATFORM_PATH)/board-info.txt
-
 # Kernel
 BOARD_CUSTOM_BOOTIMG_MK := $(PLATFORM_PATH)/mkbootimg.mk
 BOARD_KERNEL_BASE := 0x00000000
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=bacon user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1
+BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom user_debug=23 msm_rtb.filter=0x3b7 ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_SEPARATED_DT := true
-BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000 --tags_offset 0x01e00000
+BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 01000000 --tags_offset 00000100
 TARGET_KERNEL_ARCH := arm
-TARGET_KERNEL_CONFIG := cyanogenmod_bacon_defconfig
-TARGET_KERNEL_SOURCE := kernel/oneplus/msm8974
-
-# Enable DIAG on debug builds
-ifneq ($(TARGET_BUILD_VARIANT),user)
-TARGET_KERNEL_ADDITIONAL_CONFIG:= cyanogenmod_debug_config
-endif
-
-# ANT+
-BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
+#TARGET_KERNEL_CONFIG := onyx_defconfig
+#TARGET_KERNEL_SOURCE := kernel/oneplus/onyx
 
 # Assert
-TARGET_OTA_ASSERT_DEVICE := bacon,A0001
+TARGET_OTA_ASSERT_DEVICE := OnePlus,onyx
 
 # Audio
 BOARD_USES_ALSA_AUDIO := true
 AUDIO_FEATURE_ENABLED_HWDEP_CAL := true
-AUDIO_FEATURE_ENABLED_LOW_LATENCY_CAPTURE := true
 AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
 AUDIO_FEATURE_ENABLED_NEW_SAMPLE_RATE := true
 AUDIO_FEATURE_LOW_LATENCY_PRIMARY := true
@@ -80,14 +65,13 @@ QCOM_BT_USE_SMD_TTY := true
 
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
-COMMON_GLOBAL_CFLAGS += -DOPPO_CAMERA_HARDWARE
 
 # Charger
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
 
 # CM Hardware
-BOARD_USES_CYANOGEN_HARDWARE := true
-BOARD_HARDWARE_CLASS += $(PLATFORM_PATH)/cmhw
+#BOARD_USES_CYANOGEN_HARDWARE := true
+#BOARD_HARDWARE_CLASS += $(PLATFORM_PATH)/cmhw
 
 # Enable transparent compression in the build
 # TARGET_TRANSPARENT_COMPRESSION_METHOD := lz4
@@ -123,10 +107,6 @@ TARGET_USERIMAGES_USE_F2FS := true
 # Workaround for factory issue
 BOARD_VOLD_CRYPTFS_MIGRATE := true
 
-# Flags
-COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD -DUSE_RIL_VERSION_10
-COMMON_GLOBAL_CPPFLAGS += -DNO_SECURE_DISCARD -DUSE_RIL_VERSION_10
-
 # Fonts
 EXTENDED_FONT_FOOTPRINT := true
 
@@ -145,15 +125,6 @@ TARGET_USES_ION := true
 USE_OPENGL_RENDERER := true
 VSYNC_EVENT_PHASE_OFFSET_NS := 7500000
 
-# Init
-TARGET_INIT_VENDOR_LIB := libinit_bacon
-
-# Lights
-TARGET_PROVIDES_LIBLIGHT := true
-
-# NFC
-BOARD_NFC_CHIPSET := pn547
-
 # Protobuf-c
 PROTOBUF_SUPPORTED := true
 
@@ -164,7 +135,7 @@ BOARD_USES_QCOM_HARDWARE := true
 TARGET_RIL_VARIANT := caf
 
 # Recovery
-TARGET_RECOVERY_FSTAB := $(PLATFORM_PATH)/rootdir/etc/fstab.bacon
+TARGET_RECOVERY_FSTAB := $(PLATFORM_PATH)/ramdisk/fstab.qcom
 
 # RPC
 TARGET_NO_RPC := true
@@ -184,21 +155,8 @@ BOARD_WPA_SUPPLICANT_DRIVER      := NL80211
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
 BOARD_HOSTAPD_DRIVER             := NL80211
 BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_qcwcn
-TARGET_USES_WCNSS_CTRL           := true
-TARGET_USES_QCOM_WCNSS_QMI       := true
-TARGET_USES_WCNSS_MAC_ADDR_REV   := true
-TARGET_WCNSS_MAC_PREFIX          := e8bba8
 WIFI_DRIVER_FW_PATH_STA          := "sta"
 WIFI_DRIVER_FW_PATH_AP           := "ap"
 WPA_SUPPLICANT_VERSION           := VER_0_8_X
 
-# inherit from the proprietary version
-ifneq ($(QCPATH),)
--include $(QCPATH)/common/msm8974/BoardConfigVendor.mk
-
-ifeq ($(BOARD_USES_QCNE),true)
-TARGET_LDPRELOAD := libNimsWrap.so
-endif
-endif
-
--include vendor/oneplus/bacon/BoardConfigVendor.mk
+-include vendor/oneplus/onyx/BoardConfigVendor.mk
