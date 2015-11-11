@@ -21,6 +21,12 @@ $(call inherit-product-if-exists, vendor/oneplus/onyx/onyx-vendor.mk)
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay vendor/extra/overlays/phone-1080p
 
+# Kernel
+TARGET_PREBUILT_KERNEL := true
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/zImage:kernel \
+    $(LOCAL_PATH)/dt.img:dt.img
+
 # Audio
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/acdb/Liquid/Liquid_Hdmi_cal.acdb:system/etc/acdbdata/Liquid/Liquid_Hdmi_cal.acdb \
