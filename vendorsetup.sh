@@ -1,2 +1,1 @@
 add_lunch_combo cm_onyx-userdebug
-add_lunch_combo full_onyx-userdebug

@@ -178,4 +178,8 @@ $(shell mkdir -p $(TARGET_OUT)/etc/firmware/wlan/prima; \
     ln -sf /data/misc/wifi/WCNSS_qcom_cfg.ini \
 	    $(TARGET_OUT)/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini)
 
+# Prebuilt kernel workaround
+$(shell rm -rf $(TARGET_OUT)/obj/KERNEL_OBJ/usr; \
+    mkdir -p $(TARGET_OUT)/obj/KERNEL_OBJ/usr)
+
 endif

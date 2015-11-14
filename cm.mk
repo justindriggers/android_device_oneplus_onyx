@@ -12,16 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Inherit from those products. Most specific first.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
-
 # Inherit from onyx device
-$(call inherit-product, device/oneplus/onyx/onyx.mk)
+$(call inherit-product, device/oneplus/onyx/full_onyx.mk)
 
 # Inherit some common CM stuff.
 $(call inherit-product, vendor/cm/config/common_full_phone.mk)
 
-LOCAL_PATH := device/oneplus/onyx
-
-PRODUCT_RELEASE_NAME := OnePlus X
-PRODUCT_NAME := cm_onyx
+# Inherit oneplus2-specific vendor tree
+$(call inherit-product-if-exists, vendor/oneplus/onyx/onyx-vendor.mk)
