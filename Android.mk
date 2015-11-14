@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 The CyanogenMod Project
+# Copyright (C) 2015 The CyanogenMod Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ MODEM_IMAGES := \
     modem.b06 modem.b07 modem.b08 modem.b09 modem.b10 modem.b11 \
     modem.b12 modem.b13 modem.b14 modem.b15 modem.b16 modem.b17 \
     modem.b18 modem.b19 modem.b20 modem.b21 modem.b22 modem.b23 \
-    modem.b24 modem.b25 modem.b26 modem.b27 modem.mdt
+    modem.b24 modem.b25 modem.mdt
 
 MODEM_SYMLINKS := $(addprefix $(TARGET_OUT_ETC)/firmware/,$(notdir $(MODEM_IMAGES)))
 $(MODEM_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
@@ -148,14 +148,29 @@ $(WV_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
 
 ALL_DEFAULT_INSTALLED_MODULES += $(WV_SYMLINKS)
 
-# Create links for audcal data files
-$(shell mkdir -p $(TARGET_OUT)/etc/firmware/wcd9320; \
-	ln -sf /data/misc/audio/wcd9320_anc.bin \
-		$(TARGET_OUT)/etc/firmware/wcd9320/wcd9320_anc.bin;\
-	ln -sf /data/misc/audio/mbhc.bin \
-		$(TARGET_OUT)/etc/firmware/wcd9320/wcd9320_mbhc.bin; \
-	ln -sf /data/misc/audio/wcd9320_mad_audio.bin \
-		$(TARGET_OUT)/etc/firmware/wcd9320/wcd9320_mad_audio.bin)
+TQS_IMAGES := \
+    tqs.b00 tqs.b01 tqs.b02 tqs.b03 tqs.mdt
+
+TQS_SYMLINKS := $(addprefix $(TARGET_OUT_ETC)/firmware/,$(notdir $(TQS_IMAGES)))
+$(TQS_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
+	@echo "TQS firmware link: $@"
+	@mkdir -p $(dir $@)
+	@rm -rf $@
+	$(hide) ln -sf /firmware/image/$(notdir $@) $@
+
+ALL_DEFAULT_INSTALLED_MODULES += $(TQS_SYMLINKS)
+
+WCD9320_IMAGES := \
+    wcd9320_anc.bin wcd9320_mad_audio.bin wcd9320_mbhc.bin
+
+WCD9320_SYMLINKS := $(addprefix $(TARGET_OUT_ETC)/firmware/wcd9320/,$(WCD9320_IMAGES))
+$(WCD9320_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
+	@echo "wcd9320 firmware link: $@"
+	@mkdir -p $(dir $@)
+	@rm -rf $@
+	tf=$(notdir $@); if [ "$$tf" == "wcd9320_mbhc.bin" ]; then tf="mbhc.bin"; fi; ln -sf /data/misc/audio/$$tf $@
+
+ALL_DEFAULT_INSTALLED_MODULES += $(WCD9320_SYMLINKS)
 
 # Create a link for the WCNSS config file, which ends up as a writable
 # version in /data/misc/wifi
