@@ -18,11 +18,13 @@
 $(call inherit-product-if-exists, vendor/oneplus/onyx/onyx-vendor-blobs.mk)
 $(call inherit-product-if-exists, vendor/oneplus/onyx/onyx-vendor.mk)
 
+LOCAL_PATH := device/oneplus/onyx
+
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay vendor/extra/overlays/phone-1080p
 
 # Kernel
-TARGET_PREBUILT_KERNEL := true
+TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/zImage
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/zImage:kernel \
     $(LOCAL_PATH)/dt.img:dt.img

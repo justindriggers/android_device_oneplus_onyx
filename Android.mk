@@ -14,11 +14,11 @@
 # limitations under the License.
 #
 
-LOCAL_PATH := $(call my-dir)
+LOCAL_PATH := device/oneplus/onyx
 
 ifneq ($(filter onyx,$(TARGET_DEVICE)),)
 
-include $(call all-subdir-makefiles,$(LOCAL_PATH))
+include $(call all-makefiles-under,$(LOCAL_PATH))
 
 include $(CLEAR_VARS)
 

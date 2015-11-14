@@ -1,4 +1,4 @@
-LOCAL_PATH := $(call my-dir)
+LOCAL_PATH := device/oneplus/onyx
 
 #----------------------------------------------------------------------
 # extra images

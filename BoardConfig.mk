@@ -14,10 +14,10 @@
 # limitations under the License.
 #
 
-PLATFORM_PATH := device/oneplus/onyx
+LOCAL_PATH := device/oneplus/onyx
 
 # Include path
-TARGET_SPECIFIC_HEADER_PATH := $(PLATFORM_PATH)/include
+TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
 
 # Bootloader
 BOARD_VENDOR := oneplus
@@ -37,15 +37,13 @@ TARGET_CPU_ABI2 := armeabi
 TARGET_CPU_VARIANT := krait
 
 # Kernel
-BOARD_CUSTOM_BOOTIMG_MK := $(PLATFORM_PATH)/mkbootimg.mk
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom user_debug=23 msm_rtb.filter=0x3b7 ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_SEPARATED_DT := true
-BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01000000 --tags_offset 0x00000100
-TARGET_KERNEL_ARCH := arm
-#TARGET_KERNEL_CONFIG := onyx_defconfig
-#TARGET_KERNEL_SOURCE := kernel/oneplus/onyx
+BOARD_MKBOOTIMG_ARGS := --dt device/oneplus/onyx/dt.img--ramdisk_offset 0x01000000 --tags_offset 0x00000100
+#BOARD_CUSTOM_BOOTIMG_MK := $(LOCAL_PATH)/mkbootimg.mk
+TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/zImage
 
 # ANT+
 BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
@@ -62,7 +60,7 @@ AUDIO_FEATURE_LOW_LATENCY_PRIMARY := true
 
 # Bluetooth
 BLUETOOTH_HCI_USE_MCT := true
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(PLATFORM_PATH)/bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(LOCAL_PATH)/bluetooth
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
 QCOM_BT_USE_SMD_TTY := true
@@ -75,7 +73,7 @@ BOARD_CHARGER_DISABLE_INIT_BLANK := true
 
 # CM Hardware
 #BOARD_USES_CYANOGEN_HARDWARE := true
-#BOARD_HARDWARE_CLASS += $(PLATFORM_PATH)/cmhw
+#BOARD_HARDWARE_CLASS += $(LOCAL_PATH)/cmhw
 
 # Enable transparent compression in the build
 # TARGET_TRANSPARENT_COMPRESSION_METHOD := lz4
@@ -112,7 +110,7 @@ BOARD_VOLD_CRYPTFS_MIGRATE := true
 EXTENDED_FONT_FOOTPRINT := true
 
 # GPS
-TARGET_GPS_HAL_PATH := $(PLATFORM_PATH)/gps
+TARGET_GPS_HAL_PATH := $(LOCAL_PATH)/gps
 TARGET_PROVIDES_GPS_LOC_API := true
 
 # Graphics
@@ -142,7 +140,7 @@ BOARD_USES_QCOM_HARDWARE := true
 TARGET_RIL_VARIANT := caf
 
 # Recovery
-TARGET_RECOVERY_FSTAB := $(PLATFORM_PATH)/ramdisk/fstab.qcom
+TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/ramdisk/fstab.qcom
 
 # RPC
 TARGET_NO_RPC := true
@@ -151,7 +149,7 @@ TARGET_NO_RPC := true
 include device/qcom/sepolicy/sepolicy.mk
 
 BOARD_SEPOLICY_DIRS += \
-    $(PLATFORM_PATH)/sepolicy
+    $(LOCAL_PATH)/sepolicy
 
 # Wifi
 BOARD_HAS_QCOM_WLAN              := true
