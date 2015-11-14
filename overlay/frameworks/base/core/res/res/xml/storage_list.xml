@@ -22,11 +22,20 @@
 <StorageList xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- internal emulated storage -->
-    <storage
-             android:storageDescription="@string/storage_internal"
-             android:primary="true"
-             android:emulated="true"
+    <storage android:mountPoint="/storage/sdcard0" 
+             android:storageDescription="@string/storage_internal" 
+             android:primary="true" 
+             android:removable="false" 
+             android:emulated="true" 
              android:mtpReserve="100" />
+
+    <!-- external sdcard -->
+    <storage android:mountPoint="/storage/sdcard1" 
+             android:storageDescription="@string/storage_sd_card" 
+             android:primary="false" 
+             android:removable="true" 
+             android:emulated="false" 
+             android:allowMassStorage="true" />
 
     <!-- external USB OTG storage -->
     <storage android:mountPoint="/storage/usbdisk"
@@ -34,5 +43,34 @@
              android:primary="false"
              android:emulated="false"
              android:removable="true" />
-
+    <storage android:mountPoint="/storage/UDiskA" 
+             android:storageDescription="@string/storage_usb" 
+             android:primary="false" 
+             android:removable="true" 
+             android:emulated="false" />
+    <storage android:mountPoint="/storage/UDiskB" 
+             android:storageDescription="@string/storage_usb" 
+             android:primary="false" 
+             android:removable="true"
+             android:emulated="false" />
+    <storage android:mountPoint="/storage/UDiskC" 
+             android:storageDescription="@string/storage_usb" 
+             android:primary="false" 
+             android:removable="true" 
+             android:emulated="false" />
+    <storage android:mountPoint="/storage/UDiskD" 
+             android:storageDescription="@string/storage_usb" 
+             android:primary="false" 
+             android:removable="true" 
+             android:emulated="false" />
+    <storage android:mountPoint="/storage/UDiskE" 
+             android:storageDescription="@string/storage_usb" 
+             android:primary="false" 
+             android:removable="true" 
+             android:emulated="false" />
+    <storage android:mountPoint="/storage/UDiskF" 
+             android:storageDescription="@string/storage_usb" 
+             android:primary="false" 
+             android:removable="true" 
+             android:emulated="false" />
 </StorageList>
