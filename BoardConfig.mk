@@ -18,6 +18,7 @@ LOCAL_PATH := device/oneplus/onyx
 
 # Include path
 TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
+PRODUCT_VENDOR_KERNEL_HEADERS := $(LOCAL_PATH)/kernel-headers
 
 # Bootloader
 BOARD_VENDOR := oneplus
