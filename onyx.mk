@@ -240,3 +240,10 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     camera2.portability.force_api=1 \
     telephony.lteOnGsmDevice=1 \
     persist.netmon.linger=5000
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    drm.service.enabled=true \
+    persist.power.useautobrightadj=true \
+    persist.radio.apm_sim_not_pwdn=1 \
+    persist.radio.multisim.config=dsds \
+    ro.vendor.extension_library=libqti-perfd-client.so
