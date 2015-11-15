@@ -192,6 +192,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/thermal-engine-8974.conf:system/etc/thermal-engine-8974.conf
 
+# TWRP
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/twrp/twrp.fstab:recovery/root/etc/twrp.fstab
+
 # USB
 PRODUCT_PACKAGES += \
     com.android.future.usb.accessory
