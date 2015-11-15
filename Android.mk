@@ -160,17 +160,17 @@ $(TQS_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
 
 ALL_DEFAULT_INSTALLED_MODULES += $(TQS_SYMLINKS)
 
-WCD9320_IMAGES := \
-    wcd9320_anc.bin wcd9320_mad_audio.bin wcd9320_mbhc.bin
-
-WCD9320_SYMLINKS := $(addprefix $(TARGET_OUT_ETC)/firmware/wcd9320/,$(WCD9320_IMAGES))
-$(WCD9320_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
-	@echo "wcd9320 firmware link: $@"
-	@mkdir -p $(dir $@)
-	@rm -rf $@
-	tf=$(notdir $@); if [ "$$tf" == "wcd9320_mbhc.bin" ]; then tf="mbhc.bin"; fi; ln -sf /data/misc/audio/$$tf $@
-
-ALL_DEFAULT_INSTALLED_MODULES += $(WCD9320_SYMLINKS)
+# Create links for audcal data files
+$(shell mkdir -p $(TARGET_OUT)/etc/firmware/wcd9320; \
+	echo "TQS firmware link: wcd9320_anc.bin" \
+	ln -sf /data/misc/audio/wcd9320_anc.bin \
+		$(TARGET_OUT)/etc/firmware/wcd9320/wcd9320_anc.bin; \
+	echo "TQS firmware link: wcd9320_mbhc.bin" \
+	ln -sf /data/misc/audio/mbhc.bin \
+		$(TARGET_OUT)/etc/firmware/wcd9320/wcd9320_mbhc.bin; \
+	echo "TQS firmware link: wcd9320_mad_audio.bin" \
+	ln -sf /data/misc/audio/wcd9320_mad_audio.bin \
+		$(TARGET_OUT)/etc/firmware/wcd9320/wcd9320_mad_audio.bin)
 
 # Create a link for the WCNSS config file, which ends up as a writable
 # version in /data/misc/wifi
