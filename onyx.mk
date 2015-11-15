@@ -20,6 +20,10 @@ $(call inherit-product-if-exists, vendor/oneplus/onyx/onyx-vendor.mk)
 
 LOCAL_PATH := device/oneplus/onyx
 
+# Ramdisk
+PRODUCT_COPY_FILES += \
+    $(call find-copy-subdir-files,*,device/oneplus/onyx/ramdisk,root)
+
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay vendor/extra/overlays/phone-1080p
 
