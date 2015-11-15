@@ -39,7 +39,6 @@
 void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *board_type) {
     char device[PROP_VALUE_MAX];
     char rf_version[PROP_VALUE_MAX];
-    int rc;
 
     UNUSED(msm_id);
     UNUSED(msm_ver);
