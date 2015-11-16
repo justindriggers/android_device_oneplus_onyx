@@ -27,12 +27,6 @@ PRODUCT_COPY_FILES += \
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay vendor/extra/overlays/phone-1080p
 
-# Kernel
-TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/zImage
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/zImage:kernel \
-    $(LOCAL_PATH)/dt.img:dt.img
-
 # Audio
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/acdb/Liquid/Liquid_Hdmi_cal.acdb:system/etc/acdbdata/Liquid/Liquid_Hdmi_cal.acdb \
@@ -187,10 +181,6 @@ PRODUCT_COPY_FILES += \
 # Power
 PRODUCT_PACKAGES += \
     power.msm8974
-
-# Prebuilt
-PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,device/oneplus/onyx/prebuilt/system,system)
 
 # Thermal config
 PRODUCT_COPY_FILES += \
