@@ -181,4 +181,7 @@ WIFI_DRIVER_FW_PATH_STA          := "sta"
 WIFI_DRIVER_FW_PATH_AP           := "ap"
 WPA_SUPPLICANT_VERSION           := VER_0_8_X
 
+# To be removed
+BLOCK_BASED_OTA := false
+
 -include vendor/oneplus/onyx/BoardConfigVendor.mk
