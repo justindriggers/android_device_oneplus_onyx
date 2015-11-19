@@ -16,3 +16,4 @@
 /devices/msm_sdcc.2/mmc_host                          auto         auto    defaults                                                         wait,voldmanaged=sdcard1:auto
 /devices/platform/xhci-hcd/usb1                       auto         auto    defaults                                                         wait,voldmanaged=usbdisk:auto
 
+
