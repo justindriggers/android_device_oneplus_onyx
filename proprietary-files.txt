@@ -13,7 +13,6 @@ bin/btconfig
 bin/btnvtool
 bin/cnd
 bin/copy_wifi_nv
-bin/cplay
 bin/diag_callback_client
 bin/diag_dci_sample
 bin/diag_klog
@@ -87,9 +86,6 @@ bin/subsystem_ramdump
 bin/test_diag
 bin/thermal-engine
 bin/time_daemon
-bin/tinycap
-bin/tinypcminfo
-bin/tinyplay
 bin/usb_uicc_client
 bin/usbhub
 bin/usbhub_init
@@ -216,9 +212,7 @@ lib/libMcClient.so
 lib/libMcRegistry.so
 lib/libOmxVdecHevc.so
 lib/libP11EncryptorDecryptor.so
-lib/libQWiFiSoftApCfg.so
 lib/libassert_tip_service.so
-lib/libaudio-resampler.so
 lib/libcnefeatureconfig.so
 lib/libdiagdci.so
 lib/libdoor.so
