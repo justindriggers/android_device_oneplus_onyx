@@ -24,6 +24,10 @@ LOCAL_PATH := device/oneplus/onyx
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,device/oneplus/onyx/ramdisk,root)
 
+# Prebuilt DT
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/dt.img:dt.img
+
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay vendor/extra/overlays/phone-1080p
 
