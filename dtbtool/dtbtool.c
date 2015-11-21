@@ -46,6 +46,7 @@
 #define QCDT_DT_TAG    "qcom,msm-id = <"
 #define QCDT_BOARD_TAG "qcom,board-id = <"
 #define QCDT_HW_VERSION_TAG "qcom,hw-ver = <"
+#define QCDT_PRODUCT_NAME_TAG "qcom,product-name = <"
 
 #define PAGE_SIZE_DEF  2048
 #define PAGE_SIZE_MAX  (1024*1024)
@@ -66,6 +67,7 @@ struct chipInfo_t {
   uint32_t revNum;
   uint32_t dtb_size;
   uint32_t hwVer;
+  uint64_t productName;
   char     *dtb_file;
   struct chipInfo_t *prev;
   struct chipInfo_t *next;
@@ -95,6 +97,12 @@ struct chipHw_t {
   uint32_t hwVer;
   struct chipHw_t *next;
   struct chipHw_t *t_next;
+};
+
+struct chipNa_t {
+  uint32_t productName;
+  struct chipNa_t *next;
+  struct chipNa_t *t_next;
 };
 
 char *input_dir;
@@ -193,7 +201,9 @@ int chip_add(struct chipInfo_t *c)
                 ((c->subtype == x->subtype) &&
                  ((c->hwVer < x->hwVer) ||
                   ((c->hwVer == x->hwVer) &&
-                   (c->revNum < x->revNum))))))))) {
+                   ((c->productName < x->productName) ||
+                    ((c->productName == x->productName) &&
+                     (c->revNum < x->revNum))))))))))) {
             if (!x->prev) {
                 c->next = x;
                 c->prev = NULL;
@@ -212,7 +222,8 @@ int chip_add(struct chipInfo_t *c)
             (c->platform == x->platform) &&
             (c->subtype == x->subtype) &&
             (c->revNum == x->revNum) &&
-            (c->hwVer == x->hwVer)) {
+            (c->hwVer == x->hwVer) &&
+            (c->productName == x->productName)) {
             return RC_ERROR;  /* duplicate */
         }
         if (!x->next) {
@@ -263,12 +274,13 @@ struct chipInfo_t *getChipInfo(const char *filename, int *num, uint32_t msmversi
     uint32_t data_st[2] = {0, 0};
     char *tok, *sptr = NULL;
     int i, entryValid, entryEnded;
-    int count = 0, count1 = 0, count2 =0, count3 =0;
+    int count = 0, count1 = 0, count2 =0, count3 =0, count4 =0;
     int entryValidST, entryEndedST, entryValidDT, entryEndedDT;
-    int entryValidHW, entryEndedHW;
+    int entryValidHW, entryEndedHW, entryValidNA, entryEndedNA;
     struct chipId_t *chipId = NULL, *cId = NULL, *tmp_id = NULL;
     struct chipSt_t *chipSt = NULL, *cSt = NULL, *tmp_st = NULL;
     struct chipHw_t *chipHw = NULL, *cHw = NULL, *tmp_hw = NULL;
+    struct chipNa_t *chipNa = NULL, *cNa = NULL, *tmp_na = NULL;
 
     line_size = 1024;
     line = (char *)malloc(line_size);
@@ -493,6 +505,49 @@ struct chipInfo_t *getChipInfo(const char *filename, int *num, uint32_t msmversi
                         }
                     }
                 }
+
+                if ((pos = strstr(line,QCDT_PRODUCT_NAME_TAG)) != NULL) {
+                    uint64_t data;
+                    pos += strlen(QCDT_PRODUCT_NAME_TAG);
+                    entryEndedNA = 0;
+                    for (;entryEndedNA < 1;) {
+                        entryValidNA = 1;
+                        tok = strtok_r(pos, "", &sptr);
+                        pos = NULL;
+                        if (tok != NULL) {
+                            if (*tok == '>') {
+                                entryEndedNA = 1;
+                                entryValidNA = 0;
+                                break;
+                            }
+                            data = strtoul(tok, NULL, 0);
+                        } else {
+                            data = 0;
+                            entryValidNA = 0;
+                            entryEndedNA = 1;
+                        }
+                        if (entryValidNA) {
+                            tmp_na = (struct chipNa_t *)
+                                       malloc(sizeof(struct chipNa_t));
+                            if (!tmp_na) {
+                                log_err("Out of memory\n");
+                                break;
+                            }
+
+                            if (!chipNa) {
+                                chipNa = tmp_na;
+                                cNa = tmp_na;
+                                chipNa->t_next = NULL;
+                            } else {
+                                tmp_na->t_next = chipNa->t_next;
+                                chipNa->t_next = tmp_na;
+                            }
+
+                            tmp_na->productName = data;
+                            count4++;
+                        }
+                    }
+                }
             }
         }
     }
@@ -514,8 +569,15 @@ struct chipInfo_t *getChipInfo(const char *filename, int *num, uint32_t msmversi
         return NULL;
     }
 
+    if (count4 == 0) {
+        log_err("... skip, incorrect '%s' format\n", QCDT_PRODUCT_NAME_TAG);
+        return NULL;
+    }
+
     tmp_st = cSt;
     tmp_hw = cHw;
+    tmp_na = cNa;
+
     while (cId != NULL) {
         while (cSt != NULL) {
             tmp = (struct chipInfo_t *)
@@ -537,6 +599,7 @@ struct chipInfo_t *getChipInfo(const char *filename, int *num, uint32_t msmversi
             tmp->revNum   = cId->revNum;
             tmp->subtype  = cSt->subtype;
             tmp->hwVer = cHw->hwVer;
+            tmp->productName = cNa->productName;
             tmp->dtb_size = 0;
             tmp->dtb_file = NULL;
             tmp->master   = chip;
@@ -545,19 +608,22 @@ struct chipInfo_t *getChipInfo(const char *filename, int *num, uint32_t msmversi
 
             cSt = cSt->t_next;
             cHw = cHw->t_next;
+            cNa = cNa->t_next;
 
         }
         cSt = tmp_st;
         cId = cId->t_next;
         cHw = tmp_hw;
+        cNa = tmp_na;
     }
 
-    if (entryEndedST  == 1 && entryEndedDT == 1 && entryEndedHW == 1) {
+    if (entryEndedST  == 1 && entryEndedDT == 1 && entryEndedHW == 1 && entryEndedNA == 1) {
         pclose(pfile);
         *num = count1;
         free(chipSt);
         free(chipId);
         free(chipHw);
+        free(chipNa);
         return chip;
     }
 
@@ -793,17 +859,17 @@ int main(int argc, char **argv)
     dtb_offset = 12               + /* header */
                  (24 * dtb_count) + /* DTB table entries */
                  4;                 /* end of table indicator */
+
     /* Round up to page size */
     padding = page_size - (dtb_offset % page_size);
     dtb_offset += padding;
     expected = dtb_offset;
 
-    /* Write index table:
+    /* Write index table: TODO: Add HW rev and product name to the dtb index
          chipset
          platform
          subtype
          soc rev
-         hw-ver
          dtb offset
          dtb size
      */
