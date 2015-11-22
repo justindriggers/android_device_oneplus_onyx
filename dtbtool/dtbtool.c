@@ -67,7 +67,7 @@ struct chipInfo_t {
   uint32_t revNum;
   uint32_t dtb_size;
   uint32_t hwVer;
-  uint64_t productName;
+  uint32_t productName;
   char     *dtb_file;
   struct chipInfo_t *prev;
   struct chipInfo_t *next;
@@ -274,9 +274,9 @@ struct chipInfo_t *getChipInfo(const char *filename, int *num, uint32_t msmversi
     uint32_t data_st[2] = {0, 0};
     char *tok, *sptr = NULL;
     int i, entryValid, entryEnded;
-    int count = 0, count1 = 0, count2 =0, count3 =0, count4 =0;
-    int entryValidST, entryEndedST, entryValidDT, entryEndedDT;
-    int entryValidHW, entryEndedHW, entryValidNA, entryEndedNA;
+    int count = 0, count1 = 0, count2 = 0, count3 = 0, count4 = 0;
+    int entryValidST, entryEndedST, entryValidDT, entryEndedDT = 0;
+    int entryValidHW, entryEndedHW, entryValidNA, entryEndedNA = 0;
     struct chipId_t *chipId = NULL, *cId = NULL, *tmp_id = NULL;
     struct chipSt_t *chipSt = NULL, *cSt = NULL, *tmp_st = NULL;
     struct chipHw_t *chipHw = NULL, *cHw = NULL, *tmp_hw = NULL;
@@ -692,11 +692,18 @@ int GetVersionInfo(const char *filename)
    v2 format:
       qcom,msm-id = <x z> [, <x2 z2> ...;
       qcom,board-id = <y y'> [, <y2 y2'> ...;
+   v2 format for OnePlus :
+      qcom,msm-id = <x z> [, <x2 z2> ...;
+      qcom,board-id = <y y'> [, <y2 y2'> ...;
+      qcom,hw-ver = <hw> [, <hw> ...;
+      qcom,product-name = <na> [, <na> ...;
    Fields:
       x  = chipset
       y  = platform
       y' = subtype
       z  = soc rev
+      hw = hardware version
+      na = product name
  */
 int main(int argc, char **argv)
 {
@@ -794,12 +801,12 @@ int main(int argc, char **argv)
                     continue;
                 }
 
-                log_info("chipset: %u, rev: %u, platform: %u, subtype: %u\n",
-                         chip->chipset, chip->revNum, chip->platform, chip->subtype);
+                log_info("chipset: %u, rev: %u, platform: %u, subtype: %u, hardware-version: %u, product-name: %u\n",
+                         chip->chipset, chip->revNum, chip->platform, chip->subtype, chip->hwVer, chip->productName);
 
                 for (t_chip = chip->t_next; t_chip; t_chip = t_chip->t_next) {
-                    log_info("   additional chipset: %u, rev: %u, platform: %u, subtype: %u\n",
-                             t_chip->chipset, t_chip->revNum, t_chip->platform, t_chip->subtype);
+                    log_info("chipset: %u, rev: %u, platform: %u, subtype: %u, hardware-version: %u, product-name: %u\n",
+                             t_chip->chipset, t_chip->revNum, t_chip->platform, t_chip->subtype, t_chip->hwVer, t_chip->productName);
                 }
 
                 rc = chip_add(chip);
@@ -818,8 +825,8 @@ int main(int argc, char **argv)
                 for (t_chip = chip->t_next; t_chip; t_chip = t_chip->t_next) {
                     rc = chip_add(t_chip);
                     if (rc != RC_SUCCESS) {
-                        log_err("... duplicate info, skipped (chipset %u, rev: %u, platform: %u, subtype %u:\n",
-                             t_chip->chipset, t_chip->revNum, t_chip->platform, t_chip->subtype);
+                        log_err("... duplicate info, skipped (chipset: %u, rev: %u, platform: %u, subtype: %u, hardware-version: %u, product-name: %u\n",
+                             t_chip->chipset, t_chip->revNum, t_chip->platform, t_chip->subtype, t_chip->hwVer, t_chip->productName);
                         continue;
                     }
                     dtb_count++;
@@ -865,13 +872,13 @@ int main(int argc, char **argv)
     dtb_offset += padding;
     expected = dtb_offset;
 
-    /* Write index table: TODO: Add HW rev and product name to the dtb index
+    /* Write index table:
          chipset
          platform
          subtype
          soc rev
-         product-name
          hw-ver
+         product-name
          dtb offset
          dtb size
      */
@@ -880,8 +887,8 @@ int main(int argc, char **argv)
         wrote += write(out_fd, &chip->platform, sizeof(uint32_t));
         wrote += write(out_fd, &chip->subtype, sizeof(uint32_t));
         wrote += write(out_fd, &chip->revNum, sizeof(uint32_t));
-        wrote += write(out_fd, &chip->productName, sizeof(uint32_t));
         wrote += write(out_fd, &chip->hwVer, sizeof(uint32_t));
+        wrote += write(out_fd, &chip->productName, sizeof(uint32_t));
         if (chip->master->master_offset != 0) {
             wrote += write(out_fd, &chip->master->master_offset, sizeof(uint32_t));
         } else {
