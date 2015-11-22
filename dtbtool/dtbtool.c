@@ -507,7 +507,7 @@ struct chipInfo_t *getChipInfo(const char *filename, int *num, uint32_t msmversi
                 }
 
                 if ((pos = strstr(line,QCDT_PRODUCT_NAME_TAG)) != NULL) {
-                    uint64_t data;
+                    uint32_t data;
                     pos += strlen(QCDT_PRODUCT_NAME_TAG);
                     entryEndedNA = 0;
                     for (;entryEndedNA < 1;) {
@@ -857,7 +857,7 @@ int main(int argc, char **argv)
 
     /* Calculate offset of first DTB block */
     dtb_offset = 12               + /* header */
-                 (24 * dtb_count) + /* DTB table entries */
+                 (32 * dtb_count) + /* DTB table entries */
                  4;                 /* end of table indicator */
 
     /* Round up to page size */
@@ -870,6 +870,8 @@ int main(int argc, char **argv)
          platform
          subtype
          soc rev
+         product-name
+         hw-ver
          dtb offset
          dtb size
      */
@@ -878,6 +880,8 @@ int main(int argc, char **argv)
         wrote += write(out_fd, &chip->platform, sizeof(uint32_t));
         wrote += write(out_fd, &chip->subtype, sizeof(uint32_t));
         wrote += write(out_fd, &chip->revNum, sizeof(uint32_t));
+        wrote += write(out_fd, &chip->productName, sizeof(uint32_t));
+        wrote += write(out_fd, &chip->hwVer, sizeof(uint32_t));
         if (chip->master->master_offset != 0) {
             wrote += write(out_fd, &chip->master->master_offset, sizeof(uint32_t));
         } else {
