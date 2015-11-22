@@ -128,6 +128,7 @@ USE_OPENGL_RENDERER := true
 VSYNC_EVENT_PHASE_OFFSET_NS := 7500000
 
 # Init
+TARGET_UNIFIED_DEVICE := true
 TARGET_INIT_VENDOR_LIB := libinit_msm
 TARGET_LIBINIT_DEFINES_FILE := device/oneplus/onyx/init/init_onyx.c
 
